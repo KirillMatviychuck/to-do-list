@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import classNew from './Todolist.module.css'
 import {AddItemForm} from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
@@ -8,6 +8,8 @@ import {Button} from "@mui/material";
 import {Task} from "./Task";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
 import {FilterTypes} from "./state/todolist-reducer";
+import {useDispatch} from "react-redux";
+import {fetchTasksTC} from "./state/tasks-reducer";
 
 
 type PropsTypes = {
@@ -44,6 +46,10 @@ const Todolist = React.memo((props: PropsTypes) => {
     if (props.filter === 'active') {
         tasksForToDoList = props.toDoListData.filter(t => t.status === TaskStatuses.Completed)
     }
+    const dispatch = useDispatch() as any
+    useEffect(() => {
+        dispatch(fetchTasksTC(props.id))
+    }, [])
     return (
         <div className={"toDoList"}>
             <div className={classNew.titleSpan}><EditableSpan text={props.title} changeSpanText={changeToDoListTitle}/>
