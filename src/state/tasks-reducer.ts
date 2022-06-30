@@ -2,6 +2,7 @@ import {addNewTodolistAC, deleteTodolistAC, setTodolistsAC} from "./todolist-red
 import {TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
+import {setErrorMessage, setProgressStatus} from "./app-reducer";
 
 
 const tasksInitialState: TasksStateType = {}
@@ -51,9 +52,18 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
         })
 }
 export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+    dispatch(setProgressStatus('loading'))
     todolistsAPI.createTask(todolistId, title)
         .then(data => {
-            dispatch(addTaskAC(data.data.item))
+            if (data.resultCode === 0) {
+                dispatch(addTaskAC(data.data.item))
+                dispatch(setProgressStatus('succeeded'))
+            } else if (data.resultCode === 1){
+                dispatch(setErrorMessage(data.messages[0]))
+            } else {
+                dispatch(setErrorMessage('something go wrong'))
+            }
+            dispatch(setProgressStatus('failed'))
         })
 }
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {

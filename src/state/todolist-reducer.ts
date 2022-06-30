@@ -1,5 +1,6 @@
 import {todolistsAPI, TodolistType} from "../api/todolists-api";
 import {Dispatch} from "redux";
+import {setProgressStatus} from "./app-reducer";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -34,15 +35,19 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) =>
 
 // thunks
 export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
+    dispatch(setProgressStatus('loading'))
     todolistsAPI.getTodolists()
         .then(data => {
             dispatch(setTodolistsAC(data))
+            dispatch(setProgressStatus('succeeded'))
         })
 }
 export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    dispatch(setProgressStatus('loading'))
     todolistsAPI.createTodolist(title)
         .then(data => {
             dispatch(addNewTodolistAC(data.data.item))
+            dispatch(setProgressStatus('succeeded'))
         })
 }
 export const deleteTodolistTC = (id: string) => (dispatch: Dispatch) => {
