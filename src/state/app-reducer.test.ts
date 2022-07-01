@@ -1,4 +1,4 @@
-import {appReducer, AppReducerType, setErrorMessage, setProgressStatus} from "./app-reducer";
+import {appReducer, AppReducerType, setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
 
 let startState: AppReducerType;
 
@@ -10,12 +10,12 @@ beforeEach(() => {
 })
 
 test('change error message', () => {
-    const correctState = appReducer(startState, setErrorMessage('error message'))
+    const correctState = appReducer(startState, setAppErrorMessage('error message'))
 
     expect(correctState.error).toBe('error message')
 })
 test('change status', () => {
-    const correctState = appReducer(startState, setProgressStatus('succeeded'))
+    const correctState = appReducer(startState, setAppProgressStatus('succeeded'))
 
     expect(correctState.status).toBe('succeeded')
 })

@@ -3,7 +3,9 @@ export type AppReducerType = {
     error: string | null
 }
 export type AppProgressStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type ActionsType = ReturnType<typeof setErrorMessage> | ReturnType<typeof setProgressStatus>
+type ActionsType = SetAppErrorMessageType | SetAppProgressStatusType
+export type SetAppProgressStatusType = ReturnType<typeof setAppProgressStatus>
+export type SetAppErrorMessageType = ReturnType<typeof setAppErrorMessage>
 
 const initialState: AppReducerType = {
     status: 'idle',
@@ -21,5 +23,5 @@ export const appReducer = (state: AppReducerType = initialState, action: Actions
     }
 }
 
-export const setErrorMessage = (errorMessage: string | null) => ({type: 'APP/SET-ERROR', error: errorMessage} as const)
-export const setProgressStatus = (status: AppProgressStatusType) => ({type: 'APP/SET-STATUS', status} as const)
+export const setAppErrorMessage = (errorMessage: string | null) => ({type: 'APP/SET-ERROR', error: errorMessage} as const)
+export const setAppProgressStatus = (status: AppProgressStatusType) => ({type: 'APP/SET-STATUS', status} as const)

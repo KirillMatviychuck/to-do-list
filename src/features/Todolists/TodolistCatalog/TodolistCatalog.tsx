@@ -71,17 +71,15 @@ const TodolistsCatalog = () => {
 
                         return <Grid item>
                             <Paper style={{margin: "10px", padding: "20px"}}>
-                                <Todolist title={t.title}
-                                          key={t.id}
-                                          id={t.id}
-                                          toDoListData={tasksForToDoList}
+                                <Todolist key={t.id}
+                                          toDoListData={t}
+                                          tasks={tasksForToDoList}
                                           removeTask={removeTask}
                                           changeFilter={changeFilter}
                                           addTask={addTask}
                                           changeStatusTask={changeTaskStatus}
                                           changeSpanTextHandler={changeTaskTitle}
                                           changeToDoListTitle={changeToDoListTitle}
-                                          filter={t.filter}
                                           removeToDoList={deleteTodolist}/>
                             </Paper>
                         </Grid>
