@@ -49,6 +49,22 @@ const todolistsAPI = {
     }
 }
 
+// авторизация
+export const authAPI = {
+    login(email: string, password: string, rememberMe: boolean) {
+        return instance.post<ResponseType<{userId: number}>>(`auth/login`, {email, password, rememberMe})
+            .then(res => res.data)
+    },
+    logout() {
+      return instance.delete<ResponseType>(`auth/login`)
+          .then(res => res.data)
+    },
+    initialize() {
+        return instance.get<ResponseType<{id: number, email: string, login: string}>>(`auth/me`)
+            .then(res => res.data)
+    }
+}
+
 // types
 export type TodolistType = {
     id: string

@@ -15,13 +15,18 @@ import {TaskStatuses} from "../../../api/todolists-api";
 import {Container, Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import Todolist from "../Todolist/Todolist";
+import { Navigate } from "react-router-dom";
 
 const TodolistsCatalog = () => {
     const dispatch = useDispatch() as any
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
+        if(!isLoggedIn) {
+            return
+        }
         dispatch(fetchTodolistsTC())
     }, [])
 
@@ -56,6 +61,10 @@ const TodolistsCatalog = () => {
 
     const deleteTodolist = (toDoListId: string) => {
         dispatch(deleteTodolistTC(toDoListId))
+    }
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
     }
 
     return (

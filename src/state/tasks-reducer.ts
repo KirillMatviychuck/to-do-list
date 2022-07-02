@@ -2,7 +2,7 @@ import {addNewTodolistAC, deleteTodolistAC, setTodolistsAC} from "./todolist-red
 import {TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
-import {setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
+import {setAppProgressStatus} from "./app-reducer";
 import {handleAppServerError, handleNetworkServerError} from "../utils/handleErrorUtils";
 
 
@@ -62,8 +62,9 @@ export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispa
             if (data.resultCode === 0) {
                 dispatch(addTaskAC(data.data.item))
                 dispatch(setAppProgressStatus('succeeded'))
+            } else {
+                handleAppServerError(data, dispatch)
             }
-            handleAppServerError(data, dispatch)
         })
         .catch(error => {
             handleNetworkServerError(error, dispatch)

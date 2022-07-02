@@ -1,0 +1,15 @@
+.loginWrap {
+    display: flex;
+    height: 90vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm {
+    height: 270px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

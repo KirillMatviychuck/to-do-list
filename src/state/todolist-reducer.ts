@@ -47,6 +47,7 @@ export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
         })
         .catch(error => {
             console.warn(error)
+            dispatch(setAppProgressStatus('failed'))
         })
 }
 export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
