@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../../state/store";
+import {AppRootStateType} from "../../../store/store";
 import {
     changeTodolistFilterAC,
     changeTodolistTitleTC,
@@ -8,8 +8,8 @@ import {
     fetchTodolistsTC,
     FilterTypes,
     TodolistDomainType
-} from "../../../state/todolist-reducer";
-import {addTaskTC, deleteTaskTC, TasksStateType, updateTaskTC} from "../../../state/tasks-reducer";
+} from "../../../reducers/todolist-reducer";
+import {addTaskTC, deleteTaskTC, TasksStateType, updateTaskTC} from "../../../reducers/tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../../api/todolists-api";
 import {Container, Grid, Paper} from "@material-ui/core";

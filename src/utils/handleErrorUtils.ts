@@ -3,7 +3,7 @@ import {
     SetAppErrorMessageType,
     setAppProgressStatus,
     SetAppProgressStatusType
-} from "../state/app-reducer";
+} from "../reducers/app-reducer";
 import {ResponseType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 

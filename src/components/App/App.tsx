@@ -4,22 +4,21 @@ import {AppBar, Button, CircularProgress, IconButton, Toolbar, Typography} from 
 import {Menu} from "@material-ui/icons";
 import {TodolistsCatalog} from "../../features/Todolists/TodolistCatalog/TodolistCatalog";
 import {CustomizedSnackbars} from "../ErrorSnackbar/ErrorSnackbar";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../state/store";
-import {AppProgressStatusType, initializeAppTC} from "../../state/app-reducer";
+import {initializeAppTC} from "../../reducers/app-reducer";
 import {LinearProgress} from "@mui/material";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {Login} from "../Login/Login";
 import {logoutUserTC} from "../Login/auth-reducer";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 
 function App() {
-    let status = useSelector<AppRootStateType, AppProgressStatusType>(state => state.app.status)
-    let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
-    const dispatch = useDispatch()
-    const logoutHandler = () => dispatch(logoutUserTC() as any)
+    let status = useAppSelector(state => state.app.status)
+    let isInitialized = useAppSelector(state => state.app.isInitialized)
+    const dispatch = useAppDispatch()
+    const logoutHandler = () => dispatch(logoutUserTC())
 
     useEffect(() => {
-        dispatch(initializeAppTC() as any)
+        dispatch(initializeAppTC())
     }, [])
 
     if (!isInitialized) {

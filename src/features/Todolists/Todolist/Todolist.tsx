@@ -7,9 +7,9 @@ import {IconButton} from "@material-ui/core";
 import {Button} from "@mui/material";
 import {Task} from "./Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
-import {FilterTypes, TodolistDomainType} from "../../../state/todolist-reducer";
+import {FilterTypes, TodolistDomainType} from "../../../reducers/todolist-reducer";
 import {useDispatch} from "react-redux";
-import {fetchTasksTC} from "../../../state/tasks-reducer";
+import {fetchTasksTC} from "../../../reducers/tasks-reducer";
 
 
 type PropsTypes = {

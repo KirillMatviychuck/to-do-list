@@ -1,6 +1,6 @@
-import {Dispatch} from "redux";
 import {authAPI} from "../api/todolists-api";
 import {authUser} from "../components/Login/auth-reducer";
+import {AppThunk} from "../store/store";
 
 const initialState: AppReducerType = {
     status: 'idle',
@@ -8,7 +8,7 @@ const initialState: AppReducerType = {
     isInitialized: false
 }
 
-export const appReducer = (state: AppReducerType = initialState, action: ActionsType): AppReducerType => {
+export const appReducer = (state: AppReducerType = initialState, action: AppReducerActionsType): AppReducerType => {
     switch (action.type) {
         case 'APP/SET-STATUS':
             return {...state, status: action.status}
@@ -21,11 +21,14 @@ export const appReducer = (state: AppReducerType = initialState, action: Actions
     }
 }
 
-export const setAppErrorMessage = (errorMessage: string | null) => ({type: 'APP/SET-ERROR', error: errorMessage} as const)
+export const setAppErrorMessage = (errorMessage: string | null) => ({
+    type: 'APP/SET-ERROR',
+    error: errorMessage
+} as const)
 export const setAppProgressStatus = (status: AppProgressStatusType) => ({type: 'APP/SET-STATUS', status} as const)
 export const setIsInitialized = (value: boolean) => ({type: 'APP/SET-IS-INITIALIZED', value} as const)
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
+export const initializeAppTC = (): AppThunk => (dispatch) => {
     authAPI.initialize()
         .then(data => {
             if (data.resultCode === 0) {
@@ -41,7 +44,7 @@ export type AppReducerType = {
     isInitialized: boolean
 }
 export type AppProgressStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type ActionsType = SetAppErrorMessageType | SetAppProgressStatusType | SetIsInitializedType
+export type AppReducerActionsType = SetAppErrorMessageType | SetAppProgressStatusType | SetIsInitializedType
 
 export type SetAppProgressStatusType = ReturnType<typeof setAppProgressStatus>
 export type SetAppErrorMessageType = ReturnType<typeof setAppErrorMessage>

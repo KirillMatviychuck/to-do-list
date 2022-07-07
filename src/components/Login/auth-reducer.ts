@@ -1,6 +1,6 @@
-import {Dispatch} from "redux";
 import {authAPI} from "../../api/todolists-api";
-import {setAppProgressStatus, setIsInitialized} from "../../state/app-reducer";
+import {setAppProgressStatus} from "../../reducers/app-reducer";
+import {AppThunk} from "../../store/store";
 
 const initialState = {
     isLoggedIn: false
@@ -17,7 +17,7 @@ export const authReducer = (state: AuthInitialStateType = initialState, action: 
 
 export const authUser = (authValue: boolean) => ({type: 'AUTH/AUTH-USER', authValue} as const)
 
-export const loginUserTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
+export const loginUserTC = (email: string, password: string, rememberMe: boolean): AppThunk => (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
     authAPI.login(email, password, rememberMe)
         .then(data => {
@@ -27,7 +27,7 @@ export const loginUserTC = (email: string, password: string, rememberMe: boolean
             }
         })
 }
-export const logoutUserTC = () => (dispatch: Dispatch) => {
+export const logoutUserTC = (): AppThunk => (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
     authAPI.logout()
         .then(data => {
@@ -39,6 +39,6 @@ export const logoutUserTC = () => (dispatch: Dispatch) => {
 }
 
 export type AuthInitialStateType = typeof initialState
-type AuthActionType =
+export type AuthActionType =
     | ReturnType<typeof authUser>
 
