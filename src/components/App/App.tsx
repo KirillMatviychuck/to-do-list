@@ -22,7 +22,6 @@ function App() {
     }, [])
 
     if (!isInitialized) {
-        debugger
         return <div className={classes.progressBar}><CircularProgress /></div>
     }
     return (

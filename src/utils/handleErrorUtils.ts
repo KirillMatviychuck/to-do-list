@@ -11,7 +11,6 @@ export const handleAppServerError = <D> (data: ResponseType<D>, dispatch: Dispat
     if (data.messages.length) {
         dispatch(setAppErrorMessage(data.messages[0]))
     } else {
-        debugger
         dispatch(setAppErrorMessage('something go wrong'))
     }
     dispatch(setAppProgressStatus('failed'))

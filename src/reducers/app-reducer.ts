@@ -28,14 +28,20 @@ export const setAppErrorMessage = (errorMessage: string | null) => ({
 export const setAppProgressStatus = (status: AppProgressStatusType) => ({type: 'APP/SET-STATUS', status} as const)
 export const setIsInitialized = (value: boolean) => ({type: 'APP/SET-IS-INITIALIZED', value} as const)
 
-export const initializeAppTC = (): AppThunk => (dispatch) => {
-    authAPI.initialize()
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(authUser(true))
-            }
-            dispatch(setIsInitialized(true))
-        })
+export const initializeAppTC = (): AppThunk => async (dispatch) => {
+    try {
+        const data = await authAPI.initialize()
+        if (data.resultCode === 0) {
+            dispatch(authUser(true))
+        }
+        if (data.resultCode) {
+            dispatch(setAppProgressStatus('failed'))
+        }
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+    } finally {
+        dispatch(setIsInitialized(true))
+    }
 }
 
 export type AppReducerType = {

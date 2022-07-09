@@ -1,5 +1,5 @@
 import {todolistsAPI, TodolistType} from "../api/todolists-api";
-import {AppProgressStatusType, setAppProgressStatus} from "./app-reducer";
+import {AppProgressStatusType, setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
 import {AppThunk} from "../store/store";
 
 const initialState: Array<TodolistDomainType> = []
@@ -38,40 +38,51 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) =>
     ({type: 'SET-TODOLISTS', todolists} as const)
 
 // thunks
-export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
+export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
-    todolistsAPI.getTodolists()
-        .then(data => {
-            dispatch(setTodolistsAC(data))
-            dispatch(setAppProgressStatus('succeeded'))
-        })
-        .catch(error => {
-            console.warn(error)
-            dispatch(setAppProgressStatus('failed'))
-        })
+    let data = await todolistsAPI.getTodolists()
+    try {
+        dispatch(setTodolistsAC(data))
+        dispatch(setAppProgressStatus('succeeded'))
+    } catch (error) {
+        console.warn(error)
+        dispatch(setAppProgressStatus('failed'))
+    }
 }
-export const createTodolistTC = (title: string): AppThunk => (dispatch) => {
+export const createTodolistTC = (title: string): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
-    todolistsAPI.createTodolist(title)
-        .then(data => {
-            dispatch(addNewTodolistAC(data.data.item))
-            dispatch(setAppProgressStatus('succeeded'))
-        })
+    try {
+        const data = await todolistsAPI.createTodolist(title)
+        dispatch(addNewTodolistAC(data.data.item))
+        dispatch(setAppProgressStatus('succeeded'))
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppProgressStatus('failed'))
+    }
+
 }
-export const deleteTodolistTC = (id: string): AppThunk => (dispatch) => {
+export const deleteTodolistTC = (id: string): AppThunk => async (dispatch) => {
     dispatch(changeTodolistProgressStatus(id, 'loading'))
     dispatch(setAppProgressStatus('loading'))
-    todolistsAPI.deleteTodolist(id)
-        .then(res => {
-            dispatch(deleteTodolistAC(id))
-            dispatch(setAppProgressStatus('succeeded'))
-        })
+    try {
+        const data = await todolistsAPI.deleteTodolist(id)
+        dispatch(deleteTodolistAC(id))
+        dispatch(setAppProgressStatus('succeeded'))
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppProgressStatus('failed'))
+    }
+
 }
-export const changeTodolistTitleTC = (id: string, newTitle: string): AppThunk => (dispatch) => {
-    todolistsAPI.updateTodolist(id, newTitle)
-        .then(data => {
-            dispatch(changeTodolistTitleAC(id, newTitle))
-        })
+export const changeTodolistTitleTC = (id: string, newTitle: string): AppThunk => async (dispatch) => {
+    try {
+        await todolistsAPI.updateTodolist(id, newTitle)
+        dispatch(changeTodolistTitleAC(id, newTitle))
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppProgressStatus('failed'))
+    }
+
 }
 
 // types

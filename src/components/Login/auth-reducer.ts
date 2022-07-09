@@ -1,5 +1,5 @@
 import {authAPI} from "../../api/todolists-api";
-import {setAppProgressStatus} from "../../reducers/app-reducer";
+import {setAppErrorMessage, setAppProgressStatus} from "../../reducers/app-reducer";
 import {AppThunk} from "../../store/store";
 
 const initialState = {
@@ -17,25 +17,34 @@ export const authReducer = (state: AuthInitialStateType = initialState, action: 
 
 export const authUser = (authValue: boolean) => ({type: 'AUTH/AUTH-USER', authValue} as const)
 
-export const loginUserTC = (email: string, password: string, rememberMe: boolean): AppThunk => (dispatch) => {
+export const loginUserTC = (email: string, password: string, rememberMe: boolean): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
-    authAPI.login(email, password, rememberMe)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(authUser(true))
-                dispatch(setAppProgressStatus('idle'))
-            }
-        })
+    try {
+        const data = await authAPI.login(email, password, rememberMe)
+        if (data.resultCode === 0) {
+            dispatch(authUser(true))
+            dispatch(setAppProgressStatus('idle'))
+        }
+        if (data.resultCode) {
+            dispatch(setAppErrorMessage(data.messages[0]))
+            dispatch(setAppProgressStatus('failed'))
+        }
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+    }
 }
-export const logoutUserTC = (): AppThunk => (dispatch) => {
+export const logoutUserTC = (): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
-    authAPI.logout()
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(authUser(false))
-                dispatch(setAppProgressStatus('succeeded'))
-            }
-        })
+    try {
+        const data = await authAPI.logout()
+        if (data.resultCode === 0) {
+            dispatch(authUser(false))
+            dispatch(setAppProgressStatus('succeeded'))
+        }
+    } catch (error) {
+        dispatch(setAppProgressStatus('failed'))
+        dispatch(setAppErrorMessage(`${error}`))
+    }
 }
 
 export type AuthInitialStateType = typeof initialState

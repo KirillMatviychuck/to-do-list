@@ -1,7 +1,7 @@
 import {addNewTodolistAC, deleteTodolistAC, setTodolistsAC} from "./todolist-reducer";
 import {TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolists-api";
 import {AppThunk} from "../store/store";
-import {setAppProgressStatus} from "./app-reducer";
+import {setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
 import {handleAppServerError, handleNetworkServerError} from "../utils/handleErrorUtils";
 
 
@@ -54,29 +54,30 @@ export const fetchTasksTC = (todolistId: string): AppThunk => (dispatch) => {
             dispatch(setTasksAC(data.items, todolistId))
         })
 }
-export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispatch) => {
+export const addTaskTC = (todolistId: string, title: string): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))
-    todolistsAPI.createTask(todolistId, title)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(addTaskAC(data.data.item))
-                dispatch(setAppProgressStatus('succeeded'))
-            } else {
-                handleAppServerError(data, dispatch)
-            }
-        })
-        .catch(error => {
-            handleNetworkServerError(error, dispatch)
-        })
+    try {
+        const data = await todolistsAPI.createTask(todolistId, title)
+        if (data.resultCode === 0) {
+            dispatch(addTaskAC(data.data.item))
+            dispatch(setAppProgressStatus('succeeded'))
+        } else {
+            handleAppServerError(data, dispatch)
+        }
+    } catch (error) {
+        handleNetworkServerError({message: `${error}`}, dispatch)
+    }
 }
-export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch) => {
-    todolistsAPI.deleteTask(todolistId, taskId)
-        .then(data => {
-            dispatch(removeTaskAC(taskId, todolistId))
-        })
+export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk => async (dispatch) => {
+    try {
+        await todolistsAPI.deleteTask(todolistId, taskId)
+        dispatch(removeTaskAC(taskId, todolistId))
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+    }
 }
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainModelTaskType): AppThunk =>
-    (dispatch, getState) => {
+    async (dispatch, getState) => {
         const task = getState().tasks[todolistId].find(task => task.id === taskId)
         if (!task) {
             console.warn(`task not found`)
@@ -91,13 +92,16 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             deadline: task.deadline,
             ...domainModel
         }
-        todolistsAPI.updateTask(todolistId, taskId, apiModel)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(updateTaskAC(taskId, apiModel, todolistId))
-                }
+        try {
+            const data = await todolistsAPI.updateTask(todolistId, taskId, apiModel)
+            if (data.resultCode === 0) {
+                dispatch(updateTaskAC(taskId, apiModel, todolistId))
+            } else {
                 handleAppServerError(data, dispatch)
-            })
+            }
+        } catch (error) {
+            dispatch(setAppErrorMessage(`${error}`))
+        }
     }
 
 //types
