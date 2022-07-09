@@ -48,11 +48,13 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
     ({type: 'SET-TASKS', tasks, todolistId} as const)
 
 //thunks
-export const fetchTasksTC = (todolistId: string): AppThunk => (dispatch) => {
-    todolistsAPI.getTasks(todolistId)
-        .then(data => {
-            dispatch(setTasksAC(data.items, todolistId))
-        })
+export const fetchTasksTC = (todolistId: string): AppThunk => async (dispatch) => {
+    try {
+        const data = await todolistsAPI.getTasks(todolistId)
+        dispatch(setTasksAC(data.items, todolistId))
+    } catch (error) {
+        dispatch(setAppErrorMessage(`${error}`))
+    }
 }
 export const addTaskTC = (todolistId: string, title: string): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus('loading'))

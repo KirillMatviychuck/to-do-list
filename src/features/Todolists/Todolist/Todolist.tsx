@@ -10,6 +10,7 @@ import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import {FilterTypes, TodolistDomainType} from "../../../reducers/todolist-reducer";
 import {useDispatch} from "react-redux";
 import {fetchTasksTC} from "../../../reducers/tasks-reducer";
+import {useAppDispatch} from "../../../store/hooks";
 
 
 type PropsTypes = {
@@ -44,7 +45,7 @@ const Todolist = React.memo((props: PropsTypes) => {
     if (props.toDoListData.filter === 'active') {
         tasksForToDoList = props.tasks.filter(t => t.status === TaskStatuses.Completed)
     }
-    const dispatch = useDispatch() as any
+    const dispatch = useAppDispatch()
     useEffect(() => {
         dispatch(fetchTasksTC(props.toDoListData.id))
     }, [])
