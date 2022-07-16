@@ -53,16 +53,18 @@ export const fetchTasksTC = (todolistId: string): AppThunk => async (dispatch) =
         const data = await todolistsAPI.getTasks(todolistId)
         dispatch(setTasksAC(data.items, todolistId))
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppErrorMessage({
+            errorMessage: `${error}`
+        }))
     }
 }
 export const addTaskTC = (todolistId: string, title: string): AppThunk => async (dispatch) => {
-    dispatch(setAppProgressStatus('loading'))
+    dispatch(setAppProgressStatus({status: 'loading'}))
     try {
         const data = await todolistsAPI.createTask(todolistId, title)
         if (data.resultCode === 0) {
             dispatch(addTaskAC(data.data.item))
-            dispatch(setAppProgressStatus('succeeded'))
+            dispatch(setAppProgressStatus({status: 'succeeded'}))
         } else {
             handleAppServerError(data, dispatch)
         }
@@ -75,7 +77,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk => as
         await todolistsAPI.deleteTask(todolistId, taskId)
         dispatch(removeTaskAC(taskId, todolistId))
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppErrorMessage({errorMessage: `${error}`}))
     }
 }
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainModelTaskType): AppThunk =>
@@ -102,7 +104,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
                 handleAppServerError(data, dispatch)
             }
         } catch (error) {
-            dispatch(setAppErrorMessage(`${error}`))
+            dispatch(setAppErrorMessage({errorMessage: `${error}`}))
         }
     }
 

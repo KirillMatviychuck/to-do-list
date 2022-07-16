@@ -11,12 +11,12 @@ beforeEach(() => {
 })
 
 test('change error message', () => {
-    const correctState = appReducer(startState, setAppErrorMessage('error message'))
+    const correctState = appReducer(startState, setAppErrorMessage({errorMessage: 'error message'}))
 
     expect(correctState.error).toBe('error message')
 })
 test('change status', () => {
-    const correctState = appReducer(startState, setAppProgressStatus('succeeded'))
+    const correctState = appReducer(startState, setAppProgressStatus({status: 'succeeded'}))
 
     expect(correctState.status).toBe('succeeded')
 })

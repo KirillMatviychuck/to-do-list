@@ -1,6 +1,7 @@
 import {authAPI} from "../api/todolists-api";
 import {authUser} from "../components/Login/auth-reducer";
 import {AppThunk} from "../store/store";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: AppReducerType = {
     status: 'idle',
@@ -8,39 +9,39 @@ const initialState: AppReducerType = {
     isInitialized: false
 }
 
-export const appReducer = (state: AppReducerType = initialState, action: AppReducerActionsType): AppReducerType => {
-    switch (action.type) {
-        case 'APP/SET-STATUS':
-            return {...state, status: action.status}
-        case 'APP/SET-ERROR':
-            return {...state, error: action.error}
-        case 'APP/SET-IS-INITIALIZED':
-            return {...state, isInitialized: action.value}
-        default:
-            return state
+export const appSlice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppErrorMessage(state, action: PayloadAction<{ errorMessage: string | null }>) {
+            state.error = action.payload.errorMessage
+        },
+        setAppProgressStatus(state, action: PayloadAction<{ status: AppProgressStatusType }>) {
+            state.status = action.payload.status
+        },
+        setIsInitialized(state, action: PayloadAction<{ value: boolean }>) {
+            state.isInitialized = action.payload.value
+        }
     }
-}
+})
 
-export const setAppErrorMessage = (errorMessage: string | null) => ({
-    type: 'APP/SET-ERROR',
-    error: errorMessage
-} as const)
-export const setAppProgressStatus = (status: AppProgressStatusType) => ({type: 'APP/SET-STATUS', status} as const)
-export const setIsInitialized = (value: boolean) => ({type: 'APP/SET-IS-INITIALIZED', value} as const)
+export const appReducer = appSlice.reducer
+export const {setAppProgressStatus, setAppErrorMessage, setIsInitialized} = appSlice.actions
 
+// Thunks
 export const initializeAppTC = (): AppThunk => async (dispatch) => {
     try {
         const data = await authAPI.initialize()
         if (data.resultCode === 0) {
-            dispatch(authUser(true))
+            dispatch(authUser({authValue: true}))
         }
         if (data.resultCode) {
-            dispatch(setAppProgressStatus('failed'))
+            dispatch(setAppProgressStatus({status: 'failed'}))
         }
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
+        dispatch(setAppErrorMessage({errorMessage: `${error}`}))
     } finally {
-        dispatch(setIsInitialized(true))
+        dispatch(setIsInitialized({value: true}))
     }
 }
 

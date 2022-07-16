@@ -8,7 +8,7 @@ test('correct change isAuth value', () => {
     const startState = {
         isLoggedIn: false
     }
-    const finalState = (authReducer(startState, authUser(true)))
+    const finalState = (authReducer(startState, authUser({authValue: true})))
 
     expect(finalState.isLoggedIn).toBeTruthy()
     expect(startState.isLoggedIn).toBeFalsy()

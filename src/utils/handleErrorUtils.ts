@@ -7,15 +7,15 @@ import {
 import {ResponseType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 
-export const handleAppServerError = <D> (data: ResponseType<D>, dispatch: Dispatch<SetAppErrorMessageType | SetAppProgressStatusType>) => {
+export const handleAppServerError = <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppErrorMessageType | SetAppProgressStatusType>) => {
     if (data.messages.length) {
-        dispatch(setAppErrorMessage(data.messages[0]))
+        dispatch(setAppErrorMessage({errorMessage: data.messages[0]}))
     } else {
-        dispatch(setAppErrorMessage('something go wrong'))
+        dispatch(setAppErrorMessage({errorMessage: 'something go wrong'}))
     }
-    dispatch(setAppProgressStatus('failed'))
+    dispatch(setAppProgressStatus({status: 'failed'}))
 }
-export const handleNetworkServerError =  (error: { message: string }, dispatch: Dispatch<SetAppErrorMessageType | SetAppProgressStatusType>) => {
-    dispatch(setAppErrorMessage(error.message ? error.message : 'Error occurred'))
-    dispatch(setAppProgressStatus('failed'))
+export const handleNetworkServerError = (error: { message: string }, dispatch: Dispatch<SetAppErrorMessageType | SetAppProgressStatusType>) => {
+    dispatch(setAppErrorMessage({errorMessage: error.message ? error.message : 'Error occurred'}))
+    dispatch(setAppProgressStatus({status: 'failed'}))
 }

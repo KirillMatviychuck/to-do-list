@@ -8,7 +8,6 @@ import {Button} from "@mui/material";
 import {Task} from "./Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import {FilterTypes, TodolistDomainType} from "../../../reducers/todolist-reducer";
-import {useDispatch} from "react-redux";
 import {fetchTasksTC} from "../../../reducers/tasks-reducer";
 import {useAppDispatch} from "../../../store/hooks";
 

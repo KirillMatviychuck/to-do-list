@@ -1,8 +1,34 @@
 import {todolistsAPI, TodolistType} from "../api/todolists-api";
 import {AppProgressStatusType, setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
 import {AppThunk} from "../store/store";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: Array<TodolistDomainType> = []
+
+export const todolistSlice = createSlice({
+    name: 'todolists',
+    initialState: initialState,
+    reducers: {
+        deleteTodolistAC(state, action: PayloadAction<{todolistId: string}>) {
+
+        },
+        addNewTodolistAC() {
+
+        },
+        changeTodolistTitleAC() {
+
+        },
+        changeTodolistFilterAC() {
+
+        },
+        changeTodolistProgressStatus() {
+
+        },
+        setTodolistsAC() {
+
+        }
+    }
+})
 
 const todolistReducer = (state: Array<TodolistDomainType> = initialState, action: TodolistActionsType): Array<TodolistDomainType> => {
     switch (action.type) {
@@ -39,38 +65,38 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) =>
 
 // thunks
 export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {
-    dispatch(setAppProgressStatus('loading'))
+    dispatch(setAppProgressStatus({status: 'loading'}))
     let data = await todolistsAPI.getTodolists()
     try {
         dispatch(setTodolistsAC(data))
-        dispatch(setAppProgressStatus('succeeded'))
+        dispatch(setAppProgressStatus({status: 'succeeded'}))
     } catch (error) {
         console.warn(error)
-        dispatch(setAppProgressStatus('failed'))
+        dispatch(setAppProgressStatus({status: 'failed'}))
     }
 }
 export const createTodolistTC = (title: string): AppThunk => async (dispatch) => {
-    dispatch(setAppProgressStatus('loading'))
+    dispatch(setAppProgressStatus({status: 'loading'}))
     try {
         const data = await todolistsAPI.createTodolist(title)
         dispatch(addNewTodolistAC(data.data.item))
-        dispatch(setAppProgressStatus('succeeded'))
+        dispatch(setAppProgressStatus({status: 'succeeded'}))
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
-        dispatch(setAppProgressStatus('failed'))
+        dispatch(setAppErrorMessage({errorMessage: `${error}`}))
+        dispatch(setAppProgressStatus({status: 'failed'}))
     }
 
 }
 export const deleteTodolistTC = (id: string): AppThunk => async (dispatch) => {
     dispatch(changeTodolistProgressStatus(id, 'loading'))
-    dispatch(setAppProgressStatus('loading'))
+    dispatch(setAppProgressStatus({status: 'loading'}))
     try {
         const data = await todolistsAPI.deleteTodolist(id)
         dispatch(deleteTodolistAC(id))
-        dispatch(setAppProgressStatus('succeeded'))
+        dispatch(setAppProgressStatus({status: 'succeeded'}))
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
-        dispatch(setAppProgressStatus('failed'))
+        dispatch(setAppErrorMessage({errorMessage: `${error}`}))
+        dispatch(setAppProgressStatus({status: 'failed'}))
     }
 
 }
@@ -79,8 +105,10 @@ export const changeTodolistTitleTC = (id: string, newTitle: string): AppThunk =>
         await todolistsAPI.updateTodolist(id, newTitle)
         dispatch(changeTodolistTitleAC(id, newTitle))
     } catch (error) {
-        dispatch(setAppErrorMessage(`${error}`))
-        dispatch(setAppProgressStatus('failed'))
+        dispatch(setAppErrorMessage({
+            errorMessage: `${error}`
+        }))
+        dispatch(setAppProgressStatus({status: 'failed'}))
     }
 
 }
