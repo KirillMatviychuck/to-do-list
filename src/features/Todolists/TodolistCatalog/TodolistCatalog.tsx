@@ -49,7 +49,7 @@ const TodolistsCatalog = () => {
     }, [dispatch])
 
     const changeFilter = useCallback((value: FilterTypes, toDoListId: string) => {
-        dispatch(changeTodolistFilterAC(value, toDoListId))
+        dispatch(changeTodolistFilterAC({value, toDoListId}))
     }, [dispatch])
 
     const addToDoList = useCallback((title: string) => {
