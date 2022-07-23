@@ -22,10 +22,11 @@ const TodolistsCatalog = () => {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        if(!isLoggedIn) {
+        if (!isLoggedIn) {
             return
+        } else {
+            dispatch(fetchTodolistsTC())
         }
-        dispatch(fetchTodolistsTC())
     }, [])
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, toDoListId: string) => {

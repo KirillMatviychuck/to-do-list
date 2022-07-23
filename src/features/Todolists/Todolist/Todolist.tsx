@@ -33,16 +33,15 @@ const Todolist = React.memo((props: PropsTypes) => {
         props.addTask(title, props.toDoListData.id)
     }, [props.addTask, props.toDoListData.id])
     const changeToDoListTitle = useCallback((title: string) => {
-        console.log('Todolist')
         props.changeToDoListTitle(props.toDoListData.id, title)
     }, [props.changeToDoListTitle, props.toDoListData.id])
 
     let tasksForToDoList = props.tasks
     if (props.toDoListData.filter === 'completed') {
-        tasksForToDoList = props.tasks.filter(t => t.status === TaskStatuses.New)
+        tasksForToDoList = props.tasks.filter(t => t.status === TaskStatuses.Completed)
     }
     if (props.toDoListData.filter === 'active') {
-        tasksForToDoList = props.tasks.filter(t => t.status === TaskStatuses.Completed)
+        tasksForToDoList = props.tasks.filter(t => t.status === TaskStatuses.New)
     }
     const dispatch = useAppDispatch()
     useEffect(() => {
@@ -58,7 +57,7 @@ const Todolist = React.memo((props: PropsTypes) => {
             <AddItemForm addTodolist={addTask}/>
             <div>
                 <div className="list">
-                    {props.tasks.map(t => <Task
+                    {tasksForToDoList.map(t => <Task
                         task={t}
                         removeTask={props.removeTask}
                         todolistId={props.toDoListData.id}
