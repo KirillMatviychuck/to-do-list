@@ -1,161 +1,108 @@
-export {}
-// import {} from "../App";
-// import tasksReducer, {addTaskAC, changeTaskStatusAC, changeTaskTextAC, removeTaskAC} from "./tasks-reducer";
-// import {addNewTodolistAC, removeTodolistAC} from "./todolist-reducer";
-// import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolists-api";
-//
-// test('change task status', () => {
-//     // export type TaskType = {
-//     //     description: string
-//     //     title: string
-//     //     status: TaskStatuses
-//     //     priority: TaskPriorities
-//     //     startDate: string
-//     //     deadline: string
-//     //     id: string
-//     //     todoListId: string
-//     //     order: number
-//     //     addedDate: string
-//     // }
-//
-//     const startTasks: TaskType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", status: TaskStatuses.Completed, },
-//             {id: '2', text: "JavaScript", isDone: TaskStatuses.Completed},
-//             {id: '3', text: "React", isDone: TaskStatuses.New},
-//             {id: '4', text: "Redux", isDone: TaskStatuses.New}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: TaskStatuses.New},
-//             {id: '2', text: 'Cake', isDone: TaskStatuses.Completed},
-//         ]
-//     }
-//
-//     const action = changeTaskStatusAC('1', false , "toDoListId1")
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     expect(finalTasks["toDoListId1"][0].isDone).toBeFalsy()
-// })
-//
-// test('remove task', () => {
-//     const startTasks: TasksStateType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", isDone: true},
-//             {id: '2', text: "JavaScript", isDone: true},
-//             {id: '3', text: "React", isDone: false},
-//             {id: '4', text: "Redux", isDone: false}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: false},
-//             {id: '2', text: 'Cake', isDone: true},
-//         ]
-//     }
-//
-//     const action = removeTaskAC("toDoListId2", '1')
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     expect(finalTasks["toDoListId1"].length).toBe(4)
-//     expect(finalTasks["toDoListId2"].length).toBe(1)
-//     expect(startTasks["toDoListId2"].length).toBe(2)
-// })
-//
-// test('add new task', () => {
-//
-//     const startTasks: TasksStateType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", isDone: true},
-//             {id: '2', text: "JavaScript", isDone: true},
-//             {id: '3', text: "React", isDone: false},
-//             {id: '4', text: "Redux", isDone: false}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: false},
-//             {id: '2', text: 'Cake', isDone: true},
-//         ]
-//     }
-//
-//     const action = addTaskAC("toDoListId2", 'Chocolate')
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     expect(finalTasks["toDoListId1"].length).toBe(4)
-//     expect(finalTasks["toDoListId2"].length).toBe(3)
-//     expect(finalTasks["toDoListId2"][2].text).toBe('Chocolate')
-//     expect(startTasks["toDoListId2"].length).toBe(2)
-// })
-//
-// test('change task text', () => {
-//
-//     const startTasks: TasksStateType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", isDone: true},
-//             {id: '2', text: "JavaScript", isDone: true},
-//             {id: '3', text: "React", isDone: false},
-//             {id: '4', text: "Redux", isDone: false}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: false},
-//             {id: '2', text: 'Cake', isDone: true},
-//         ]
-//     }
-//
-//     const action = changeTaskTextAC("toDoListId2", '2', 'Milk')
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     expect(finalTasks["toDoListId1"].length).toBe(4)
-//     expect(finalTasks["toDoListId2"].length).toBe(2)
-//     expect(finalTasks["toDoListId2"][1].text).toBe('Milk')
-//     expect(startTasks["toDoListId2"].length).toBe(2)
-// })
-//
-// test('new property with new array should be added when new todolist is added', () => {
-//
-//     const startTasks: TasksStateType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", isDone: true},
-//             {id: '2', text: "JavaScript", isDone: true},
-//             {id: '3', text: "React", isDone: false},
-//             {id: '4', text: "Redux", isDone: false}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: false},
-//             {id: '2', text: 'Cake', isDone: true},
-//         ]
-//     }
-//
-//     const action = addNewTodolistAC("title is no matter")
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     const keys = Object.keys(finalTasks)
-//     const newKey = keys.find(k => k !== "toDoListId1" && k !== "toDoListId2")
-//     if (!newKey) {
-//         throw new Error("new key is not added")
-//     }
-//
-//     expect(keys.length).toBe(3)
-//     expect(finalTasks[newKey]).toEqual([])
-// })
-//
-// test('property with todolistId should be deleted', () => {
-//
-//     const startTasks: TasksStateType = {
-//         "toDoListId1": [
-//             {id: '1', text: "HTML&CSS", isDone: true},
-//             {id: '2', text: "JavaScript", isDone: true},
-//             {id: '3', text: "React", isDone: false},
-//             {id: '4', text: "Redux", isDone: false}
-//         ],
-//         "toDoListId2": [
-//             {id: '1', text: 'Notebook', isDone: false},
-//             {id: '2', text: 'Cake', isDone: true},
-//         ]
-//     }
-//
-//     const action = removeTodolistAC('toDoListId2')
-//     const finalTasks = tasksReducer(startTasks, action)
-//
-//     const keys = Object.keys(finalTasks)
-//
-//
-//     expect(keys.length).toBe(1)
-//     expect(finalTasks['toDoListId2']).toBeUndefined()
-// })
+import {
+    addTaskAC,
+    removeTaskAC,
+    tasksReducer,
+    TasksStateType,
+    UpdateDomainModelTaskType,
+    updateTaskAC
+} from "./tasks-reducer";
+import {addNewTodolistAC, deleteTodolistAC} from "./todolist-reducer";
+import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
+
+let startTasks: TasksStateType = {}
+
+beforeEach(() => {
+    startTasks = {
+        'toDoListId1': [
+            {
+                todoListId: 'toDoListId1', id: '1', title: 'HTML&CSS', status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            },
+            {
+                todoListId: 'toDoListId1', id: '2', title: "JavaScript", status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            },
+            {
+                todoListId: 'toDoListId1', id: '1', title: "React", status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            },
+            {
+                todoListId: 'toDoListId1', id: '1', title: "Redux", status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            }
+        ],
+        'toDoListId2': [
+            {
+                todoListId: 'toDoListId2', id: '1', title: 'Notebook', status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            },
+            {
+                todoListId: 'toDoListId2', id: '2', title: "Cake", status: TaskStatuses.New, priority:
+                TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+            }
+        ]
+    }
+})
+
+test('remove task', () => {
+    const finalTasks = tasksReducer(startTasks, removeTaskAC({toDoListId: "toDoListId2", id: '1'}))
+
+    expect(finalTasks["toDoListId1"].length).toBe(4)
+    expect(finalTasks["toDoListId2"].length).toBe(1)
+    expect(startTasks["toDoListId2"].length).toBe(2)
+})
+
+test('add new task', () => {
+    const task1 = {
+        todoListId: 'toDoListId2', id: '3', title: 'Chocolate', status: TaskStatuses.New, priority:
+        TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
+    }
+    const finalTasks = tasksReducer(startTasks, addTaskAC({task: task1}))
+
+    expect(finalTasks["toDoListId1"].length).toBe(4)
+    expect(finalTasks["toDoListId2"].length).toBe(3)
+    expect(finalTasks["toDoListId2"][0].title).toBe('Chocolate')
+    expect(startTasks["toDoListId2"].length).toBe(2)
+})
+
+test('change task title', () => {
+    const taskModel: UpdateDomainModelTaskType = {title: 'Milk'}
+    const finalTasks = tasksReducer(startTasks, updateTaskAC({
+        toDoListId: "toDoListId2",
+        taskId: '2',
+        model: taskModel
+    }))
+
+    expect(finalTasks["toDoListId1"].length).toBe(4)
+    expect(finalTasks["toDoListId2"].length).toBe(2)
+    expect(finalTasks["toDoListId2"][1].title).toBe('Milk')
+    expect(startTasks["toDoListId2"].length).toBe(2)
+})
+
+test('new property with new array should be added when new todolist is added', () => {
+
+    const newTodolist = {
+        id: 'toDoListId3',
+        addedDate: '',
+        order: 0,
+        title: 'title is no matter'
+    }
+    const finalTasks = tasksReducer(startTasks, addNewTodolistAC({todolist: newTodolist}))
+
+    const keys = Object.keys(finalTasks)
+    const newKey = keys.find(k => k !== "toDoListId1" && k !== "toDoListId2")
+    if (!newKey) {
+        throw new Error("new key is not added")
+    }
+
+    expect(keys.length).toBe(3)
+    expect(finalTasks[newKey]).toEqual([])
+})
+
+test('property with todolistId should be deleted', () => {
+    const finalTasks = tasksReducer(startTasks, deleteTodolistAC({todolistId: 'toDoListId2'}))
+    const keys = Object.keys(finalTasks)
+
+    expect(keys.length).toBe(1)
+    expect(finalTasks['toDoListId2']).toBeUndefined()
+})

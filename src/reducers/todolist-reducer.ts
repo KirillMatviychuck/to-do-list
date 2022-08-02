@@ -68,7 +68,7 @@ export const deleteTodolistTC = (id: string): AppThunk => async (dispatch) => {
     dispatch(changeTodolistProgressStatus({id: id, status: 'loading'}))
     dispatch(setAppProgressStatus({status: 'loading'}))
     try {
-        const data = await todolistsAPI.deleteTodolist(id)
+        await todolistsAPI.deleteTodolist(id)
         dispatch(deleteTodolistAC({todolistId: id}))
         dispatch(setAppProgressStatus({status: 'succeeded'}))
     } catch (error) {

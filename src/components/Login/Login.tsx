@@ -28,7 +28,7 @@ export const Login = () => {
             }
         },
         onSubmit: values => {
-            dispatch(loginUserTC(values.email, values.password, values.rememberMe) as any)
+            dispatch(loginUserTC(values.email, values.password, values.rememberMe))
         }
     });
 

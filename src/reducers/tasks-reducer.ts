@@ -14,6 +14,7 @@ export const tasksSlice = createSlice({
     initialState: tasksInitialState,
     reducers: {
         updateTaskAC(state, action: PayloadAction<{ taskId: string, model: UpdateDomainModelTaskType, toDoListId: string }>) {
+            debugger
             const tasks = state[action.payload.toDoListId]
             const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if (index > -1) {
