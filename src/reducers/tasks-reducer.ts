@@ -3,10 +3,19 @@ import {TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolists-api"
 import {AppRootStateType, AppThunk} from "../store/store";
 import {setAppErrorMessage, setAppProgressStatus} from "./app-reducer";
 import {handleAppServerError, handleNetworkServerError} from "../utils/handleErrorUtils";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 const tasksInitialState: TasksStateType = {}
+
+export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch, rejectWithValue}) => {
+    try {
+        const data = await todolistsAPI.getTasks(todolistId)
+        return {tasks: data.items, todolistId}
+    } catch (error) {
+            return rejectWithValue({errorMessage: `${error}`})
+    }
+})
 
 
 export const tasksSlice = createSlice({
@@ -47,6 +56,9 @@ export const tasksSlice = createSlice({
                     state[tl.id] = []
                 })
             })
+            .addCase(fetchTasksTC.fulfilled, (state, action) => {
+                state[action.payload.todolistId] = action.payload.tasks
+            })
     }
 })
 
@@ -54,16 +66,7 @@ export const tasksReducer = tasksSlice.reducer
 export const {updateTaskAC, removeTaskAC, addTaskAC, setTasksAC} = tasksSlice.actions
 
 //thunks
-export const fetchTasksTC = (todolistId: string): AppThunk => async (dispatch) => {
-    try {
-        const data = await todolistsAPI.getTasks(todolistId)
-        dispatch(setTasksAC({tasks: data.items, todolistId}))
-    } catch (error) {
-        dispatch(setAppErrorMessage({
-            errorMessage: `${error}`
-        }))
-    }
-}
+
 export const addTaskTC = (todolistId: string, title: string): AppThunk => async (dispatch) => {
     dispatch(setAppProgressStatus({status: 'loading'}))
     try {

@@ -6,6 +6,13 @@
     justify-content: center;
 }
 
+.alertMessage {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    color: crimson;
+}
+
 .loginForm {
     height: 270px;
     width: 300px;

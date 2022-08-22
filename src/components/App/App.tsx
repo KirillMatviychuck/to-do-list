@@ -19,7 +19,7 @@ function App() {
 
     useEffect(() => {
         dispatch(initializeAppTC())
-    }, [])
+    }, [dispatch])
 
     if (!isInitialized) {
         return <div className={classes.progressBar}><CircularProgress /></div>
@@ -42,7 +42,7 @@ function App() {
                 {status === 'loading' && <LinearProgress color={"secondary"}/>}
                     <Routes>
                         <Route path={'/login'} element={<Login />}/>
-                        <Route path={'/'} element={<TodolistsCatalog />}/>
+                        <Route path={'/to-do-list'} element={<TodolistsCatalog />}/>
                     </Routes>
             </div>
         </BrowserRouter>
