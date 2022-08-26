@@ -49,7 +49,7 @@ const todolistsAPI = {
     }
 }
 
-// авторизация
+// authorization
 export const authAPI = {
     login(email: string, password: string, rememberMe: boolean) {
         return instance.post<ResponseType<{userId: number}>>(`auth/login`, {email, password, rememberMe})

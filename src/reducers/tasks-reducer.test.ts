@@ -1,10 +1,9 @@
 import {
-    addTaskAC,
-    removeTaskAC,
+    addTaskTC,
+    deleteTaskTC, fetchTasksTC,
     tasksReducer,
     TasksStateType,
-    UpdateDomainModelTaskType,
-    updateTaskAC
+    UpdateDomainModelTaskType, updateTaskTC,
 } from "./tasks-reducer";
 import {addNewTodolistAC, deleteTodolistAC} from "./todolist-reducer";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
@@ -43,9 +42,23 @@ beforeEach(() => {
         ]
     }
 })
+test('task should be added for todolist', () => {
+    const action = fetchTasksTC.fulfilled({tasks: startTasks['toDoListId1'], todolistId: 'toDoListId1'},
+        'requestId', 'toDoListId1')
+
+    const endState = tasksReducer({
+        'toDoListId2': [],
+        'toDoListId1': [],
+    }, action)
+
+    expect(endState['toDoListId1'].length).toBe(4)
+    expect(endState['toDoListId2'].length).toBe(0)
+})
+
 
 test('remove task', () => {
-    const finalTasks = tasksReducer(startTasks, removeTaskAC({toDoListId: "toDoListId2", id: '1'}))
+    const payload = {todoListId: "toDoListId2", id: '1'};
+    const finalTasks = tasksReducer(startTasks, deleteTaskTC.fulfilled(payload, 'requestId', payload))
 
     expect(finalTasks["toDoListId1"].length).toBe(4)
     expect(finalTasks["toDoListId2"].length).toBe(1)
@@ -57,7 +70,11 @@ test('add new task', () => {
         todoListId: 'toDoListId2', id: '3', title: 'Chocolate', status: TaskStatuses.New, priority:
         TaskPriorities.Low, startDate: '', deadline: '1', description: 'one', order: 0, addedDate: ''
     }
-    const finalTasks = tasksReducer(startTasks, addTaskAC({task: task1}))
+    const payload = {task: task1};
+    const finalTasks = tasksReducer(startTasks, addTaskTC.fulfilled(payload, 'requestId', {
+        todoListId: task1.todoListId,
+        title: task1.title
+    }))
 
     expect(finalTasks["toDoListId1"].length).toBe(4)
     expect(finalTasks["toDoListId2"].length).toBe(3)
@@ -67,11 +84,12 @@ test('add new task', () => {
 
 test('change task title', () => {
     const taskModel: UpdateDomainModelTaskType = {title: 'Milk'}
-    const finalTasks = tasksReducer(startTasks, updateTaskAC({
-        toDoListId: "toDoListId2",
+    const payload = {
+        todoListId: "toDoListId2",
         taskId: '2',
-        model: taskModel
-    }))
+        domainModel: taskModel
+    };
+    const finalTasks = tasksReducer(startTasks, updateTaskTC.fulfilled(payload, 'requestId', payload))
 
     expect(finalTasks["toDoListId1"].length).toBe(4)
     expect(finalTasks["toDoListId2"].length).toBe(2)

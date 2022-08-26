@@ -27,22 +27,22 @@ const TodolistsCatalog = () => {
         } else {
             dispatch(fetchTodolistsTC())
         }
-    }, [])
+    }, [isLoggedIn,dispatch])
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, toDoListId: string) => {
-        dispatch(updateTaskTC(toDoListId, taskId, {status}))
+        dispatch(updateTaskTC({todoListId: toDoListId, taskId, domainModel: {status}}))
     }, [dispatch])
 
     const changeTaskTitle = useCallback((taskId: string, newValue: string, toDoListId: string) => {
-        dispatch(updateTaskTC(toDoListId, taskId, {title: newValue}))
+        dispatch(updateTaskTC({todoListId: toDoListId, taskId, domainModel: {title: newValue}}))
     }, [dispatch])
 
-    const removeTask = useCallback((id: string, toDoListId: string) => {
-        dispatch(deleteTaskTC(toDoListId, id))
+    const removeTask = useCallback((id: string, todoListId: string) => {
+        dispatch(deleteTaskTC({todoListId, id}))
     }, [dispatch])
 
-    const addTask = useCallback((text: string, toDoListId: string) => {
-        dispatch(addTaskTC(toDoListId, text))
+    const addTask = useCallback((title: string, todoListId: string) => {
+        dispatch(addTaskTC({todoListId, title}))
     }, [dispatch])
 
     const changeToDoListTitle = useCallback((id: string, newTitle: string) => {
